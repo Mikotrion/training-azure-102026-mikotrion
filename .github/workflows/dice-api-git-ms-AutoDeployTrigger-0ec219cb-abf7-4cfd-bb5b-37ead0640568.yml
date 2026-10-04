@@ -7,7 +7,7 @@ on:
     branches: 
       [ main ]
     paths:
-    - '**'
+    - "nodejs-microservices/packages/dice-api/**"
     - '.github/workflows/dice-api-git-ms-AutoDeployTrigger-0ec219cb-abf7-4cfd-bb5b-37ead0640568.yml'
 
   # Allow manual trigger 
@@ -34,15 +34,14 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
-          _targetLabelKey_: _targetLabel_
-          registryUrl: 
-          registryUsername: ${{ secrets.DICEAPIGITMS_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.DICEAPIGITMS_REGISTRY_PASSWORD }}
+          appSourcePath: ${{ github.workspace }}/nodejs-microservices
+          dockerfilePath: packages/dice-api/Dockerfile
+          registryUrl: rejestrkontenerow.azurecr.io
+          registryUsername: ${{ secrets.GATEWAYAPIGITMS_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.GATEWAYAPIGITMS_REGISTRY_PASSWORD }}
           containerAppName: dice-api-git-ms
           resourceGroup: aws-szkolenie-MS
-          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          imageToBuild: rejestrkontenerow.azurecr.io/gateway-api-git-ms:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
 
