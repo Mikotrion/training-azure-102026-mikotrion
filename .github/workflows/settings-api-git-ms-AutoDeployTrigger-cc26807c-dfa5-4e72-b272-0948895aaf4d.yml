@@ -7,7 +7,7 @@ on:
     branches: 
       [ main ]
     paths:
-    - "nodejs-microservices/packages/website/**"
+    - "nodejs-microservices/packages/settings-api/**"
     - '.github/workflows/settings-api-git-ms-AutoDeployTrigger-cc26807c-dfa5-4e72-b272-0948895aaf4d.yml'
 
   # Allow manual trigger 
@@ -35,6 +35,7 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}/nodejs-microservices
+          dockerfilePath: packages/settings-api/Dockerfile
           registryUrl: rejestrkontenerow.azurecr.io 
           registryUsername: ${{ secrets.GATEWAYAPIGITMS_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.GATEWAYAPIGITMS_REGISTRY_PASSWORD }}
