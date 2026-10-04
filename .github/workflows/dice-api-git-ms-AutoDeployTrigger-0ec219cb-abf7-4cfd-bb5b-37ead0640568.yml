@@ -1,0 +1,49 @@
+name: Trigger auto deployment for dice-api-git-ms
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/dice-api-git-ms-AutoDeployTrigger-0ec219cb-abf7-4cfd-bb5b-37ead0640568.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.DICEAPIGITMS_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.DICEAPIGITMS_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.DICEAPIGITMS_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          _targetLabelKey_: _targetLabel_
+          registryUrl: 
+          registryUsername: ${{ secrets.DICEAPIGITMS_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.DICEAPIGITMS_REGISTRY_PASSWORD }}
+          containerAppName: dice-api-git-ms
+          resourceGroup: aws-szkolenie-MS
+          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
