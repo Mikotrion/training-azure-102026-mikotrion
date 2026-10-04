@@ -7,7 +7,7 @@ on:
     branches: 
       [ main ]
     paths:
-    - '**'
+    - "nodejs-microservices/packages/website/**"
     - '.github/workflows/settings-api-git-ms-AutoDeployTrigger-cc26807c-dfa5-4e72-b272-0948895aaf4d.yml'
 
   # Allow manual trigger 
@@ -34,15 +34,13 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
-          _targetLabelKey_: _targetLabel_
-          registryUrl: 
-          registryUsername: ${{ secrets.SETTINGSAPIGITMS_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.SETTINGSAPIGITMS_REGISTRY_PASSWORD }}
+          appSourcePath: ${{ github.workspace }}/nodejs-microservices
+          registryUrl: rejestrkontenerow.azurecr.io 
+          registryUsername: ${{ secrets.GATEWAYAPIGITMS_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.GATEWAYAPIGITMS_REGISTRY_PASSWORD }}
           containerAppName: settings-api-git-ms
           resourceGroup: aws-szkolenie-MS
-          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          imageToBuild: rejestrkontenerow.azurecr.io/gateway-api-git-ms:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
 
